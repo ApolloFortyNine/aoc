@@ -26,7 +26,7 @@ for i, x in enumerate(instructions_raw):
     for j, y in enumerate(x):
         number = y.isdigit()
         if not number:
-            if current_number == '606' and i == 122:
+            if current_number == '398' and i == 92:
                 pass
             if valid:
                 if (current_number):
@@ -43,4 +43,7 @@ for i, x in enumerate(instructions_raw):
                 valid = True
         else:
             print('uhoh')
+    else:
+        if current_number and valid:
+            valid_numbers.append(int(current_number))
 print(sum(valid_numbers))

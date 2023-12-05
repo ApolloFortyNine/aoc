@@ -71,15 +71,14 @@ def backwards():
     pass
 
 def main():
-    # Define the number of processes you want to use
     num_processes = 8
-
-    # with Pool(num_processes) as pool:
-    #     # results = pool.map(process_seed, seeds)
-    #     results = list(tqdm(pool.imap(process_seed, seeds), total=len(seeds)))
     lowest = 100000000000
+    chunk_size = 1000  # Adjust based on your dataset size and memory constraints
 
-    for seed in tqdm(longer_seeds, ascii=True):
-        lowest=min(lowest,process_seed(seed))
+    with Pool(num_processes) as pool:
+        for result in tqdm(pool.imap(process_seed, longer_seeds, chunksize=chunk_size), total=len(longer_seeds)):
+            lowest = min(lowest, result)
+    
     print(lowest)
-main()
+if __name__ == '__main__':
+    main()

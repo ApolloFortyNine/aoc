@@ -77,7 +77,31 @@ def main():
     for i in tqdm(range(0, len(seeds), 2), ascii=True):
         pair = seeds[i:i+2]
         for i in range(pair[1]):
-            lowest = min(lowest,process_seed(pair[0] + i))
-    print(lowest)
+            my_set.add(pair[0] + i)
+    arr = []
+    for x in maps[-1]:
+        for y in range(x[2]):
+            arr.append(x[0] + y)
+    
+    new_maps = maps[:len(maps) - 1]
+    arr = sorted(arr)
+    for k in arr:
+        if k == 46:
+            pass
+        current_val = k
+        for x in new_maps[::-1]:
+            for y in x:
+                for z in range(y[1],y[1] + y[2]):
+                    if (current_val < (x[1] + x[2])) and (current_val >= x[1]):
+                        # Do the map
+                        diff = x[1] - x[0]
+                        current_val = current_val - diff
+                        break
+        if current_val in my_set:
+            print(k)
+        # print(current_val)
+
+
+
 main()
 

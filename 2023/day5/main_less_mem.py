@@ -1,8 +1,9 @@
 from collections import deque
 from tqdm import tqdm
-import multiprocessing
+from multiprocessing import Pool
 
-with open("input.txt.test") as file:
+
+with open("input.txt") as file:
     instructions_raw = file.read().splitlines()
     
 first = instructions_raw[0].split(": ")
@@ -43,41 +44,35 @@ for seed in seeds:
 print(min(arr))
 
 # Part 2
-def main():
-    maps = [[], [], [], [], [], [], []]
-    order = ['soil', 'fertilizer', 'water', 'light', 'temperature', 'humidity', 'location']
-    current_map = -1
-    for x in instructions_raw[1:]:
-        if x.find('-to-') != -1:
-            second = x.split('-to-')
-            third = second[1].split()
-            current_map +=1
-            maps[current_map] = []
+
+
+
+def process_seed(seed):
+    current_val = seed
+    for item in order:
+        for x in maps[item]:
+            if (current_val < (x[1] + x[2])) and (current_val >= x[1]):
+                # Do the map
+                diff = x[1] - x[0]
+                current_val = current_val - diff
+                break
         else:
-            if not x:
-                continue
-            instruct = x.split()
-            instruct = list(map(lambda x: int(x), instruct))
-            maps[current_map].append(instruct)
-    def process_seed(seed):
-        current_val = seed
-        for y in maps:
-            for x in y:
-                if (current_val < (x[1] + x[2])) and (current_val >= x[1]):
-                    # Do the map
-                    diff = x[1] - x[0]
-                    current_val = current_val - diff
-                    break
-            else:
-                pass
-        return current_val
-    # Backwards?
-    my_set = set()
-    lowest = 1000000
+            pass
+    return current_val
+
+# for seed in tqdm(longer_seeds, ascii=True):
+#     arr.append(process_seed(seed))
+
+def backwards():
+    pass
+
+def main():
+    lowest = 100000000000
+    longer_seeds = set()
     for i in tqdm(range(0, len(seeds), 2), ascii=True):
         pair = seeds[i:i+2]
         for i in range(pair[1]):
-            lowest = min(lowest,process_seed(pair[0] + i))
+            lowest = min(process_seed(pair[0] + i), lowest)
+    
     print(lowest)
 main()
-

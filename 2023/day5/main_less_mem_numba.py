@@ -66,7 +66,7 @@ def backwards():
     pass
 
 def main():
-    lowest = 100000000000
+    lowest = 1000
     longer_seeds = set()
     for i in tqdm(range(0, len(seeds), 2), ascii=True):
         pair = seeds[i:i+2]

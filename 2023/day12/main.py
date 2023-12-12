@@ -45,18 +45,16 @@ print(possible)
 def recurse(string, groups):
     if (not string or string == '.') and not groups:
         return 1
-    if not groups:
-        return 0
     if not string:
         return 0
     elif string[0] == '.':
         return recurse(string[1:], groups)
     elif string[0] == '?':
         return recurse(string.replace('?', '.', 1), groups) + recurse(string.replace('?', '#', 1), groups)
-    elif len(string) < groups[0]:
-        return 0
     elif string[0] == '#':
-        if '.' not in string[:groups[0]]:
+        if not groups:
+            return 0
+        if '.' not in string[:groups[0]] and string[groups[0]] != '#':
             return recurse(string[groups[0] + 1:], groups[1:])
         else:
             return 0

@@ -1,4 +1,5 @@
 from functools import cache
+import time
 
 with open("input.txt") as file:
     instructions_raw = file.read().splitlines()
@@ -60,6 +61,7 @@ def recurse(string, groups):
             return 0
 
 possible = 0
+start = time.time()
 for instruct in instructions_raw:
     # print(instruct)
     splits = instruct.split(" ")
@@ -70,4 +72,5 @@ for instruct in instructions_raw:
     result = recurse(string, wanted_groups)
     # print(result)
     possible += result
+print(f"{(time.time() - start) * 1000} ms")
 print(possible)

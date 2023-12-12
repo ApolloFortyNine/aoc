@@ -41,25 +41,35 @@ for instruct in instructions_raw:
             possible += 1
 print(possible)
 
+@cache
+def recurse(string, groups):
+    if (not string or string == '.') and not groups:
+        return 1
+    if not groups:
+        return 0
+    if not string:
+        return 0
+    elif string[0] == '.':
+        return recurse(string[1:], groups)
+    elif string[0] == '?':
+        return recurse(string.replace('?', '.', 1), groups) + recurse(string.replace('?', '#', 1), groups)
+    elif len(string) < groups[0]:
+        return 0
+    elif string[0] == '#':
+        if '.' not in string[:groups[0]]:
+            return recurse(string[groups[0] + 1:], groups[1:])
+        else:
+            return 0
+
 possible = 0
 for instruct in instructions_raw:
     print(instruct)
     splits = instruct.split(" ")
     string = "?".join([splits[0]] * 5)
+    string += '.'
     wanted_groups = splits[1].split(',')
-    wanted_groups = list(map(lambda x: int(x), wanted_groups)) * 5
-    half = len(string) // 2
-    permutations = generate_permutations(string[:half], max_springs=sum(wanted_groups))
-    p2 = generate_permutations(string[half:], max_springs=sum(wanted_groups))
-    possible1 = 0
-    possible2 = 0
-    for x in permutations:
-        found_groups = count_groups(x)
-        if found_groups == wanted_groups:
-            possible1 += 1
-    for x in p2:
-        found_groups = count_groups(x)
-        if found_groups == wanted_groups:
-            possible2 += 1
-    possible += possible1 * possible2
+    wanted_groups = tuple(map(lambda x: int(x), wanted_groups * 5))
+    result = recurse(string, wanted_groups)
+    print(result)
+    possible += result
 print(possible)

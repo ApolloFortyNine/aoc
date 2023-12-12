@@ -1,6 +1,6 @@
 from functools import cache
 
-with open("input.txt.test") as file:
+with open("input.txt") as file:
     instructions_raw = file.read().splitlines()
     
 @cache
@@ -61,13 +61,13 @@ def recurse(string, groups):
 
 possible = 0
 for instruct in instructions_raw:
-    print(instruct)
+    # print(instruct)
     splits = instruct.split(" ")
     string = "?".join([splits[0]] * 5)
     string += '.'
     wanted_groups = splits[1].split(',')
     wanted_groups = tuple(map(lambda x: int(x), wanted_groups * 5))
     result = recurse(string, wanted_groups)
-    print(result)
+    # print(result)
     possible += result
 print(possible)

@@ -96,9 +96,29 @@ def count(arr):
 
 new_arr = arr
 # for x in tqdm(range(1000000000)):
-for x in tqdm(range(1000)):
+cycles = 1000000000
+results_arr = []
+req = 0
+for i, x in enumerate(range(1000)):
     new_arr = cycle(new_arr)
+    new_arr_bytes = new_arr.tobytes()
+    the_count = count(new_arr)
+    results_arr.append(int(the_count))
+    if new_arr_bytes in results:
+        loop_size = i - results[new_arr_bytes]
+        print(loop_size)
+        print(results[new_arr_bytes])
+        req =(cycles - (results[new_arr_bytes] + 1)) % loop_size
+        print(req)
+        break
+    else:
+        results[new_arr_bytes] = i
+for x in range(req):
+    new_arr = cycle(new_arr)
+    the_count = count(new_arr)
+    results_arr.append(int(the_count))
 print(count(new_arr))
-print(results)
+# print(results_arr)
+# print(results)
 # print(move_north(arr))
 # test = move_up(arr)

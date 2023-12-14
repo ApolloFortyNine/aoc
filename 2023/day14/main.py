@@ -1,6 +1,6 @@
 import numpy as np
 from tqdm import tqdm
-with open("input.txt.test") as file:
+with open("input.txt") as file:
     instructions_raw = file.read().splitlines()
     
 # Split each column by #, then move all Os inside each to top
@@ -11,11 +11,13 @@ arr = np.array(mine)
 cube_rocks = np.where(arr[:, 2] == '#')
 # print(cube_rocks)
 # print(np.split(arr[:, 2], cube_rocks[0]))
-test = np.rot90(arr)
+test = np.rot90(arr, -1)
+#test = np.rot90(test, -1)
+print(test)
 x = test[0]
 I = np.where(x == '#')
 # print(np.split(x, I[0]))
-
+# exit()
 def move_north(arr):
     order = {'#': 0, 'O': 1, '.': 2}
     total = 0
@@ -36,6 +38,8 @@ def move_north(arr):
         #print(split_on_rocks)
     return total
 
+last_total = 0
+results = {}
 def move_up(arr):
     order = {'#': 0, 'O': 1, '.': 2}
     total = 0
@@ -46,8 +50,18 @@ def move_up(arr):
         split_on_rocks = np.split(current_col, cube_rocks[0])
         new_col = []
         for split in split_on_rocks:
-            sorted_split = np.array(sorted(split, key=lambda x: order[x]))
-            new_col.extend(sorted_split)
+            length = len(split)
+            if len(split) == 0:
+                continue
+            if split[0] == '#':
+                length -= 1
+                new_col.append('#')
+            rounds = np.where(split == 'O')
+            num_periods = length - len(rounds[0])
+            new_col.extend(['O'] * len(rounds[0]))
+            new_col.extend(['.'] * num_periods)
+            # sorted_split = np.array(sorted(split, key=lambda x: order[x]))
+            # new_col.extend(sorted_split)
             # print(sorted_split)
         new_col_np = np.array(new_col)
         round_rock_indicies = np.where(new_col_np == 'O')
@@ -56,6 +70,7 @@ def move_up(arr):
         total += rock_total
         new_cols.append(new_col_np)
         #print(split_on_rocks)
+    # results[total] = results.get(total, 0) + 1
     return np.column_stack(new_cols)
 
 def cycle(arr):
@@ -66,11 +81,24 @@ def cycle(arr):
     southed = move_up(rotated)
     rotated = np.rot90(southed, -1)
     easted = move_up(rotated)
-    return easted
+    rotated = np.rot90(easted, -1)
+    return rotated
+
+def count(arr):
+    total = 0
+    for col in range(arr.shape[1]):
+        current_col = arr[:, col]
+        round_rock_indicies = np.where(current_col == 'O')
+        rock_total =  sum([len(current_col) - x for x in round_rock_indicies[0]])
+        total += rock_total
+    return total
+
 
 new_arr = arr
 # for x in tqdm(range(1000000000)):
 for x in tqdm(range(1000)):
     new_arr = cycle(new_arr)
-print(move_north(arr))
-test = move_up(arr)
+print(count(new_arr))
+print(results)
+# print(move_north(arr))
+# test = move_up(arr)

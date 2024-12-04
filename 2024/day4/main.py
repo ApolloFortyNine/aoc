@@ -1,4 +1,4 @@
-with open("input.txt.test") as file:
+with open("input.txt") as file:
   instructions_raw = file.read().splitlines()
 
 print(len(instructions_raw))
@@ -61,22 +61,8 @@ main()
 # part 2
 def forms_x(y, x):
   try:
-    topl = grid[y-1][x-1]
-    botr = grid[y+1][x+1]
-    topr = grid[y-1][x+1]
-    botl = grid[y+1][x-1]
-    if topl == 'S' and botr == 'M' and topr == 'S' and botl == 'M':
-      return True
-    if topl == 'M' and botr == 'S' and topr == 'M' and botl == 'S':
-      return True
-    if topl == 'S' and botr == 'M' and topr == 'M' and botl == 'S':
-      return True
-    if topl == 'M' and botr == 'S' and topr == 'S' and botl == 'M':
-      return True
-  except:
-    return False
-def forms_x2(y, x):
-  try:
+    if y == 0 or x == 0 or y == (len(grid) - 1) or x == (len(grid[0]) - 1):
+      return False
     topl = grid[y-1][x-1]
     botr = grid[y+1][x+1]
     topr = grid[y-1][x+1]
@@ -96,7 +82,7 @@ def part2():
   for i, row in enumerate(grid):
     for j, char in enumerate(row):
       if char == 'A':
-        if forms_x2(i, j):
+        if forms_x(i, j):
           total += 1
   print(total)
 part2()

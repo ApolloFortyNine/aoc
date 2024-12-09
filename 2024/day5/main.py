@@ -6,7 +6,7 @@ from collections import defaultdict
 first_half,second_half = instructions_raw.split('\n\n')
 
 order_dict = defaultdict(list)
-
+swap_count = 0
 for x in first_half.splitlines():
   num, before = x.split('|')
   order_dict[int(num)].append(int(before))
@@ -36,6 +36,7 @@ print(total)
 
 # Part 2
 def bubble_sort(arr):
+  global swap_count
   for n in range(len(arr), 0, -1):
     swapped = False  
 
@@ -46,6 +47,7 @@ def bubble_sort(arr):
       if any(x in seen for x in before_these):
         arr[i], arr[i - 1] = arr[i - 1], arr[i]
         swapped = True
+        swap_count += 1
       seen.append(cur)
       
     if not swapped:
@@ -60,3 +62,4 @@ for i in bad_indexes:
   middle_i = len(bad_update)//2
   total2 += bad_update[middle_i]
 print(total2)
+print(swap_count)

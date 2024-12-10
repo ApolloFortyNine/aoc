@@ -1,3 +1,5 @@
+import copy
+
 with open("input.txt") as file:
     instructions_raw = file.read()
 
@@ -26,6 +28,7 @@ def get_next_loc(instructions):
             yield length - i
 
 
+raw_drive_2 = copy.deepcopy(raw_drive)
 next_loc = get_next_loc(raw_drive)
 for i, x in enumerate(raw_drive):
     if x != ".":
@@ -46,3 +49,5 @@ for i, x in enumerate(raw_drive):
         continue
     total += i * int(x)
 print(total)
+
+# Part 2

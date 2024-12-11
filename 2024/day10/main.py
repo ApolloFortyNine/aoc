@@ -39,3 +39,12 @@ for i, x in enumerate(instructions_raw):
                 new_set.add((x[0], x[1]))
             total += len(new_set)
 print(total)
+
+
+# Part 2
+total = []
+for i, x in enumerate(instructions_raw):
+    for j, y in enumerate(x):
+        if y == 0:
+            total += traverse(i, j, y)
+print(len(total))
